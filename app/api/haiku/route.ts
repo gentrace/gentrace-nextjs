@@ -2,9 +2,9 @@ import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { init, interaction } from "gentrace";
 
-init({
+await init({
   apiKey: process.env.GENTRACE_API_KEY!,
-  baseURL: "https://gentrace.ai/api",
+  // instrumentation.ts will handle the tracing
   otelSetup: false,
 });
 
