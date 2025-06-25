@@ -4,12 +4,17 @@ This example demonstrates OpenTelemetry (OTEL) tracing with Gentrace in a Next.j
 
 ## Setup
 
-1. Copy `.env.example` to `.env.local` and add your API keys:
+1. Copy `.env.local.example` to `.env.local` and add your API keys:
    ```bash
-   cp .env.example .env.local
+   cp .env.local.example .env.local
    ```
 
-2. Install dependencies:
+2. Configure the following environment variables:
+   - `OPENAI_API_KEY`: Your OpenAI API key from [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+   - `GENTRACE_API_KEY`: Your Gentrace API key from [gentrace.ai/s/api-keys](https://gentrace.ai/s/api-keys)
+   - `GENTRACE_PIPELINE_ID`: Pipeline ID from your [Gentrace dashboard](https://gentrace.ai/t/)
+
+3. Install dependencies:
    ```bash
    npm install
    ```
