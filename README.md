@@ -57,3 +57,23 @@ init({
 ```
 
 **Why `otelSetup: false`?** This prevents Gentrace SDK from setting up its own OTEL configuration since we're already using Vercel's OTEL setup in `instrumentation.ts`. This avoids conflicts between the two OTEL configurations.
+
+## Known Issues
+
+### Module Resolution Error with @opentelemetry/exporter-jaeger
+
+When running the development server, you may encounter:
+
+```
+Module not found: Can't resolve '@opentelemetry/exporter-jaeger'
+```
+
+**Cause:** The `@opentelemetry/sdk-node` package (bundled with `gentrace@0.11.0`) contains code that dynamically requires the Jaeger exporter module. Next.js attempts to resolve this module at build time even though it's only used when `OTEL_TRACES_EXPORTER=jaeger` is explicitly set.
+
+**Solution:** Install the Jaeger exporter as a dependency:
+
+```bash
+npm install @opentelemetry/exporter-jaeger
+```
+
+This resolves the build-time module resolution without affecting runtime behavior, as the Jaeger exporter is only activated when explicitly configured.
