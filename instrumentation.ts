@@ -11,7 +11,15 @@ const traceExporter = new OTLPHttpJsonTraceExporter({
   },
 });
 
-export function register() {
+export async function register() {
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    await import("./sentry.server.config");
+  }
+
+  if (process.env.NEXT_RUNTIME === "edge") {
+    await import("./sentry.edge.config");
+  }
+
   registerOTel({
     serviceName: "next-app",
     spanProcessors: [
@@ -20,3 +28,40 @@ export function register() {
     ],
   });
 }
+
+export const onRequestError = async (
+  error: {
+    digest: string;
+  },
+  request: {
+    method: string;
+    url: string;
+    headers: { [key: string]: string };
+  },
+  context: {
+    routerKind: string;
+    routePath: string;
+    routeType: string;
+    renderSource: string;
+  }
+) => {
+  const { captureException } = await import("@sentry/nextjs");
+  captureException(error, {
+    mechanism: {
+      type: "instrument",
+      handled: false,
+    },
+    contexts: {
+      http: {
+        method: request.method,
+        url: request.url,
+      },
+      nextjs: {
+        routerKind: context.routerKind,
+        routePath: context.routePath,
+        routeType: context.routeType,
+        renderSource: context.renderSource,
+      },
+    },
+  });
+};
