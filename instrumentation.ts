@@ -1,8 +1,8 @@
-import {
-  ConsoleSpanExporter,
-  SimpleSpanProcessor,
-} from "@opentelemetry/sdk-trace-node";
 import { OTLPHttpJsonTraceExporter, registerOTel } from "@vercel/otel";
+import {
+  SimpleSpanProcessor,
+  ConsoleSpanExporter,
+} from "@opentelemetry/sdk-trace-base";
 
 const traceExporter = new OTLPHttpJsonTraceExporter({
   url: "https://gentrace.ai/api/otel/v1/traces",
