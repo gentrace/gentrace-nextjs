@@ -8,7 +8,6 @@ await init({
   otelSetup: false,
 });
 
-console.log("API key", process.env.GENTRACE_API_KEY!)
 
 const streamResult = interaction(
   "create-haiku",
