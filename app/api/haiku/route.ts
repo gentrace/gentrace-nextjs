@@ -2,12 +2,11 @@ import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { init, interaction } from "gentrace";
 
-await init({
+init({
   apiKey: process.env.GENTRACE_API_KEY!,
   // instrumentation.ts will handle the tracing
   otelSetup: false,
 });
-
 
 const streamResult = interaction(
   "create-haiku",

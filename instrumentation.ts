@@ -1,16 +1,3 @@
-import { OTLPHttpJsonTraceExporter, registerOTel } from "@vercel/otel";
-import {
-  SimpleSpanProcessor,
-  ConsoleSpanExporter,
-} from "@opentelemetry/sdk-trace-base";
-
-const traceExporter = new OTLPHttpJsonTraceExporter({
-  url: "https://gentrace.ai/api/otel/v1/traces",
-  headers: {
-    authorization: `Bearer ${process.env.GENTRACE_API_KEY}`,
-  },
-});
-
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     await import("./sentry.server.config");
@@ -19,14 +6,6 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === "edge") {
     await import("./sentry.edge.config");
   }
-
-  registerOTel({
-    serviceName: "next-app",
-    spanProcessors: [
-      new SimpleSpanProcessor(traceExporter),
-      new SimpleSpanProcessor(new ConsoleSpanExporter()),
-    ],
-  });
 }
 
 export const onRequestError = async (
@@ -43,7 +22,7 @@ export const onRequestError = async (
     routePath: string;
     routeType: string;
     renderSource: string;
-  },
+  }
 ) => {
   const importStart = Date.now();
   const { captureException } = await import("@sentry/nextjs");
